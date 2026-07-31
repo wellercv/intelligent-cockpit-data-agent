@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      DATA_AGENT_DATA_ROOT: ${{ runner.temp }}/data-agent-ci-empty
+      DATA_AGENT_DATA_ROOT: /tmp/data-agent-ci-empty
 
     steps:
       - uses: actions/checkout@v4
