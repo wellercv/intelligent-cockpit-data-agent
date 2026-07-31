@@ -1,5 +1,7 @@
 # 智能座舱多语言语音质量数据分析与治理 Agent
 
+[![Quality Gate](https://github.com/wellercv/intelligent-cockpit-data-agent/actions/workflows/quality.yml/badge.svg)](https://github.com/wellercv/intelligent-cockpit-data-agent/actions/workflows/quality.yml)
+
 英文名称：**Intelligent Cockpit Multilingual Voice Quality Data Agent**。
 
 项目简称：**智能座舱语音质量 Agent**。
@@ -149,7 +151,7 @@ Azure `gpt-5.4-mini` 已通过 Microsoft Entra ID 完成真实在线验收：历
 
 项目采用两层验证，避免公开 CI 依赖或复制私有业务原始数据：
 
-- GitHub Actions：Ruff、Mypy 核心类型检查、36 条无业务数据单元测试、依赖一致性检查和 Docker 镜像构建；NLU 使用运行时生成的合成 Excel fixture；
+- GitHub Actions：Ruff、Mypy 核心类型检查、36 条无业务数据单元测试、依赖一致性检查和 Docker 镜像构建已通过；NLU 使用运行时生成的合成 Excel fixture；
 - 本地全量门禁：Ruff、Mypy、74 条代码测试、25 条核心 Agent 回归、62 条合成银标回归、7 条 NLU 回归和依赖检查，严格串行执行以隔离本地治理状态。
 
 ```powershell
@@ -292,3 +294,5 @@ docker compose up --build
 - UI：<http://127.0.0.1:8501>
 
 Compose 将上一级 `ASR_agent` 目录只读挂载到 `/workspace`，原始数据不会被容器修改。
+
+Dockerfile 已由 GitHub Actions 在 Linux runner 完成镜像构建验证；本机只有需要实际启动 Compose 时才需要安装 Docker Desktop。

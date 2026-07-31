@@ -368,9 +368,9 @@ Agent Engine 与业务文件格式解耦。当前已完成 ASR CSV/JSON Provider
 | FR-OPS-005 | 提供 Provider、Tool、Skills、LLM 监控 | P1 | 已实现 |
 | FR-OPS-006 | 提供端到端评测和独立模式基线 | P0 | 已实现 |
 | FR-OPS-007 | 核心指标回归超过 5% 时返回失败 | P1 | 已实现 |
-| FR-OPS-008 | Docker Compose 配置 | P1 | 已实现，当前机器未运行验收 |
+| FR-OPS-008 | Docker Compose 配置 | P1 | 已实现；Dockerfile 已通过 GitHub Actions Linux 构建 |
 | FR-OPS-009 | 单机版仅记录本地操作标识和 Audit，不引入企业身份、RBAC 或电子签名 | P0 | 已实现 |
-| FR-OPS-010 | GitHub Actions 执行 Ruff、Mypy、无数据测试、依赖和镜像构建门禁 | P1 | 工作流已实现；推送 GitHub 后首次远程验收 |
+| FR-OPS-010 | GitHub Actions 执行 Ruff、Mypy、无数据测试、依赖和镜像构建门禁 | P1 | 已通过公开仓库远程运行 |
 | FR-OPS-011 | CD、并发压力测试和生产部署 | P2 | 下一阶段 |
 
 ---

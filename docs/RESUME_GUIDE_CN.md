@@ -43,7 +43,7 @@ LLM-as-Judge / GitHub Actions / Docker / Ruff / Mypy
 | 数据规模 | ASR 92,301 Cases；NLU 104,897 Samples | 两个真实 Provider，7 语言、6 Domain |
 | NLU 数据 | 11,885 模型错误、190 Intent、88.67% 修正后准确率 | Excel 是报告，不含全部正确样本明细 |
 | 代码测试 | 74/74 | 本地项目 venv |
-| 无数据 CI 测试 | 36/36 | 包含合成 Excel；推送 GitHub 后才声称远程 CI 通过 |
+| 无数据 CI 测试 | 36/36 | GitHub Actions 已远程通过，包含合成 Excel |
 | 核心 Agent 回归 | 25/25 | 当前内置确认集，不外推生产准确率 |
 | 合成银标 | 62/62 | 模板生成，不是人工金标 |
 | NLU/跨 Provider 回归 | 7/7 | 当前报告与内置问题集 |
@@ -87,10 +87,9 @@ ASR、Domain、Case 编号适合 BM25 精确召回，自然语言改写适合向
 
 ## 8. 秋招前还需要本人完成的事项
 
-1. 将 `data_insight_agent` 作为独立仓库推送 GitHub，首次跑通 Actions 后再添加绿色 CI Badge。
-2. 在安装 Docker 的机器或 GitHub Actions 中确认镜像构建通过，再把 Docker 写成“已验证部署”。
-3. 录制 3 到 5 分钟演示视频或 GIF，重点展示 Trace、治理 Diff 和评测，不录普通聊天过程。
-4. 根据目标岗位准备两个版本：算法/Agent 岗强调 RAG、评测和 Grounding；后端/平台岗强调 Tool Runtime、治理状态机、CI 和故障降级。
+1. 录制 3 到 5 分钟演示视频或 GIF，重点展示 Trace、跨 Provider、治理 Diff 和评测，不录普通聊天过程。
+2. 根据目标岗位准备两个版本：算法/Agent 岗强调 RAG、评测和 Grounding；后端/平台岗强调 Provider、Tool Runtime、治理状态机、CI 和故障降级。
+3. 本机需要实际运行 Compose 时再安装 Docker Desktop；Dockerfile 已通过 GitHub Actions Linux 构建。
 
 ## 9. 暂不建议增加
 
