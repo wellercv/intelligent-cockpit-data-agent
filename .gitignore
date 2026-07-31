@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+*.py[cod]
+data/*.db
+data/*.duckdb
+data/knowledge_chroma/
+data/investigation_chroma/
+data/azure_auth_record.json
+knowledge/**/*.pdf
+knowledge/**/*.docx
+.env
+out/

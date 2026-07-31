@@ -1,0 +1,16 @@
+version: 1
+data_root: ..
+provider: multilingual_asr
+languages:
+  Arabic: Arabic
+  English: English
+  French: French
+  German: German
+  Italian: Italian
+  Portuguese: Portuguese
+  Spanish: Spainsh
+patterns:
+  cases: "*_{language}/*_asr.csv"
+  summary: "*_{language}/*_output.json"
+nlu_report:
+  file: "离线NLU重测报告_20260710.xlsx"

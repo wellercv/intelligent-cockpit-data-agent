@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-07-30T04:12:46.606657+00:00",
+  "source": "data/agent_state.db",
+  "run_id": "eval-20260729T141305Z-9b9d71",
+  "dataset": "core_questions.json",
+  "mode": "azure",
+  "started_at": "2026-07-29 18:06:33",
+  "finished_at": "2026-07-30 03:49:23",
+  "total": 25,
+  "passed": 25,
+  "pass_rate": 1.0,
+  "tool_accuracy": 1.0,
+  "agent_accuracy": 1.0,
+  "intent_accuracy": 1.0,
+  "entity_accuracy": 1.0,
+  "answer_accuracy": 1.0,
+  "citation_accuracy": 1.0,
+  "judge_call_evidence": {
+    "calls": 24,
+    "ok": 24,
+    "input": 91134,
+    "output": 4494
+  },
+  "judge_scores_recoverable": false,
+  "note": "Deterministic results are reconstructed from persisted case records. Historical Judge scores were not persisted, so no Judge score is claimed for this run."
+}

@@ -1,0 +1,109 @@
+[
+  {
+    "case_id": "nlu-overview",
+    "question": "NLU 修正标签口径后的整体准确率是多少？",
+    "label_source": "imported",
+    "tags": ["nlu", "overview"],
+    "expected_tools": ["nlu_report_overview"],
+    "expected_agents": ["analysis_agent"],
+    "expected_intent": "metric_analysis",
+    "expected_entities": {
+      "metric": "accuracy",
+      "metrics": ["accuracy"],
+      "source_scope": "nlu_evaluation_report"
+    },
+    "answer_contains": ["104,897", "88.67%", "11,885"],
+    "min_sources": 1
+  },
+  {
+    "case_id": "nlu-lowest-language",
+    "question": "NLU 哪个语言准确率最低？",
+    "label_source": "imported",
+    "tags": ["nlu", "language", "ranking"],
+    "expected_tools": ["nlu_compare_accuracy"],
+    "expected_agents": ["analysis_agent"],
+    "expected_intent": "metric_analysis",
+    "expected_entities": {
+      "metric": "accuracy",
+      "metrics": ["accuracy"],
+      "source_scope": "nlu_evaluation_report"
+    },
+    "answer_contains": ["Portuguese", "84.37%"],
+    "min_sources": 1
+  },
+  {
+    "case_id": "nlu-lowest-domain",
+    "question": "NLU 哪个 Domain 准确率最低？",
+    "label_source": "imported",
+    "tags": ["nlu", "domain", "ranking"],
+    "expected_tools": ["nlu_compare_accuracy"],
+    "expected_agents": ["analysis_agent"],
+    "expected_intent": "metric_analysis",
+    "expected_entities": {
+      "metric": "accuracy",
+      "metrics": ["accuracy"],
+      "source_scope": "nlu_evaluation_report"
+    },
+    "answer_contains": ["phone", "80.73%"],
+    "min_sources": 1
+  },
+  {
+    "case_id": "nlu-error-breakdown",
+    "question": "NLU 错误类型分布是什么？",
+    "label_source": "imported",
+    "tags": ["nlu", "errors"],
+    "expected_tools": ["nlu_error_breakdown"],
+    "expected_agents": ["analysis_agent"],
+    "expected_intent": "metric_analysis",
+    "expected_entities": {
+      "source_scope": "nlu_evaluation_report"
+    },
+    "answer_contains": ["intent", "4,222", "35.52%"],
+    "min_sources": 1
+  },
+  {
+    "case_id": "nlu-parse-failures",
+    "question": "列出 3 条 NLU 解析失败错误明细",
+    "label_source": "imported",
+    "tags": ["nlu", "parse_failure"],
+    "expected_tools": ["search_nlu_errors"],
+    "expected_agents": ["analysis_agent"],
+    "expected_intent": "case_investigation",
+    "expected_entities": {
+      "source_scope": "nlu_evaluation_report"
+    },
+    "answer_contains": ["24", "3"],
+    "min_sources": 1
+  },
+  {
+    "case_id": "nlu-label-quality",
+    "question": "NLU 有哪些标签质量问题？",
+    "label_source": "imported",
+    "tags": ["nlu", "governance"],
+    "expected_tools": ["nlu_label_quality"],
+    "expected_agents": ["data_governance_agent"],
+    "expected_intent": "data_governance",
+    "expected_entities": {
+      "source_scope": "nlu_evaluation_report",
+      "risk_level": "medium"
+    },
+    "answer_contains": ["3,501", "14,889"],
+    "min_sources": 1
+  },
+  {
+    "case_id": "asr-nlu-cross-provider",
+    "question": "比较 ASR 和 NLU 的整体准确率及数据口径",
+    "label_source": "imported",
+    "tags": ["asr", "nlu", "cross-provider"],
+    "expected_tools": ["nlu_report_overview", "dataset_overview"],
+    "expected_agents": ["analysis_agent"],
+    "expected_intent": "mixed",
+    "expected_entities": {
+      "metric": "accuracy",
+      "metrics": ["accuracy"],
+      "source_scopes": ["nlu_evaluation_report", "csv_cases"]
+    },
+    "answer_contains": ["88.67%", "94.45%", "104,897", "92,301"],
+    "min_sources": 2
+  }
+]

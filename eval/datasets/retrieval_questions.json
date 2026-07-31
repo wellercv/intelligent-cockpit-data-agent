@@ -1,0 +1,110 @@
+[
+  {
+    "case_id": "accuracy-definition",
+    "query": "准确率是怎么计算的？",
+    "expected_paths": ["metrics.md"],
+    "k": 3
+  },
+  {
+    "case_id": "error-rate-definition",
+    "query": "How is the ASR error rate calculated?",
+    "expected_paths": ["metrics.md"],
+    "k": 3
+  },
+  {
+    "case_id": "csv-json-scope",
+    "query": "CSV 和 JSON 的统计口径为什么可能不同？",
+    "expected_paths": ["data_scope.md"],
+    "k": 3
+  },
+  {
+    "case_id": "french-car-control-delta",
+    "query": "法语车辆控制两个结果文件为什么对不上？",
+    "expected_paths": ["data_scope.md"],
+    "k": 3
+  },
+  {
+    "case_id": "correct-total-formula",
+    "query": "正确数除以总数对应什么指标？",
+    "expected_paths": ["metrics.md"],
+    "k": 3
+  },
+  {
+    "case_id": "default-case-source",
+    "query": "Which source is the default for case-level metrics and search?",
+    "expected_paths": ["data_scope.md"],
+    "k": 3
+  },
+  {
+    "case_id": "json-summary-scope",
+    "query": "原始 output JSON 汇总和 CSV 明细是不是同一个范围？",
+    "expected_paths": ["data_scope.md"],
+    "k": 3
+  },
+  {
+    "case_id": "ranking-metric-policy",
+    "query": "比较最好和最差语言时为什么要明确比较指标？",
+    "expected_paths": ["metrics.md"],
+    "k": 3
+  },
+  {
+    "case_id": "wer-vs-case-accuracy",
+    "query": "WER 和 Case Accuracy 有什么区别？",
+    "expected_paths": ["curated/asr_evaluation_practice.md"],
+    "k": 3
+  },
+  {
+    "case_id": "representative-asr-test-data",
+    "query": "ASR 模型评测为什么需要独立且有代表性的音频和参考转写？",
+    "expected_paths": ["curated/asr_evaluation_practice.md"],
+    "k": 3
+  },
+  {
+    "case_id": "training-data-config",
+    "query": "生成多语言训练数据前需要记录哪些配置？",
+    "expected_paths": ["curated/training_data_workflow.md"],
+    "k": 3
+  },
+  {
+    "case_id": "training-data-success",
+    "query": "为什么不能只看进程或成功标记判断训练数据生成完成？",
+    "expected_paths": ["curated/training_data_workflow.md"],
+    "k": 3
+  },
+  {
+    "case_id": "music-source-permission",
+    "query": "音乐榜单网页公开可访问是否代表允许批量爬取和再分发？",
+    "expected_paths": ["curated/music_data_source_policy.md"],
+    "k": 3
+  },
+  {
+    "case_id": "mena-chart-scope",
+    "query": "沙特和 MENA 地区的音乐实体可以参考什么官方区域榜单？",
+    "expected_paths": ["curated/music_data_source_policy.md"],
+    "k": 3
+  },
+  {
+    "case_id": "delivery-role-boundaries",
+    "query": "海外智能座舱语音项目中技术方、SDK 交付方、数据测试方和车企如何分工？",
+    "expected_paths": ["curated/project_delivery_context.md"],
+    "k": 3
+  },
+  {
+    "case_id": "quality-root-cause-boundary",
+    "query": "为什么不能只根据 ASR 文本差异判断是模型、SDK 还是应用接口的问题？",
+    "expected_paths": ["curated/project_delivery_context.md"],
+    "k": 3
+  },
+  {
+    "case_id": "synthetic-silver-purpose",
+    "query": "合成银标集可以验证哪些 Agent 能力？",
+    "expected_paths": ["curated/synthetic_evaluation_policy.md"],
+    "k": 3
+  },
+  {
+    "case_id": "synthetic-silver-limit",
+    "query": "为什么合成银标 100% 不能代表生产准确率？",
+    "expected_paths": ["curated/synthetic_evaluation_policy.md"],
+    "k": 3
+  }
+]

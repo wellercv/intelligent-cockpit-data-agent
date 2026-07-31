@@ -1,0 +1,51 @@
+contract_id: multilingual-asr-case
+version: "1.0"
+provider: multilingual_asr
+entity: asr_case
+primary_key: case_id
+owner: asr-qa
+# CSV rows are authoritative for case-level queries; JSON summaries remain a separate scope.
+authoritative_source: csv_cases
+fields:
+  - name: case_id
+    data_type: string
+    required: true
+    allow_blank: false
+    unique: true
+    mutable: false
+    description: Stable generated case identifier.
+  - name: language
+    data_type: string
+    required: true
+    allow_blank: false
+    allowed_values: [Arabic, English, French, German, Italian, Portuguese, Spanish]
+    mutable: false
+  - name: domain
+    data_type: string
+    required: true
+    allow_blank: false
+    allowed_values: [carControl, generalControl, mediaControl, naviControl, phone, systemControl]
+    mutable: false
+  - name: case_no
+    data_type: string
+    required: true
+    allow_blank: false
+    mutable: false
+  - name: result_raw
+    data_type: string
+    required: true
+    allow_blank: false
+    allowed_values: ["✓", "✗"]
+    mutable: true
+    description: Raw result marker from the CSV.
+  - name: reference_text
+    data_type: string
+    required: true
+    allow_blank: false
+    mutable: true
+  - name: hypothesis_text
+    data_type: string
+    required: true
+    allow_blank: true
+    mutable: true
+    description: Blank may represent a valid no-recognition outcome and therefore requires review rather than automatic repair.

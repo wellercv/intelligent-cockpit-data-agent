@@ -1,0 +1,54 @@
+contract_id: nlu-evaluation-finding
+version: "1.0"
+provider: nlu_evaluation
+entity: nlu_report_finding
+primary_key: finding_id
+owner: nlu-qa
+authoritative_source: nlu_evaluation_report
+fields:
+  - name: finding_id
+    data_type: string
+    required: true
+    allow_blank: false
+    unique: true
+    mutable: false
+  - name: rule_id
+    data_type: string
+    required: true
+    allow_blank: false
+    allowed_values:
+      - LANGUAGE_NAMING_MISMATCH
+      - NUMERIC_SLOT_TYPE_MISMATCH
+      - PREDICTION_JSON_PARSE_FAILURE
+      - DUPLICATE_LABEL_DETAIL
+      - DUPLICATE_MODEL_ERROR_DETAIL
+    mutable: false
+  - name: source_file
+    data_type: string
+    required: true
+    allow_blank: false
+    mutable: false
+  - name: language
+    data_type: string
+    required: false
+    allowed_values: [Arabic, English, French, German, Italian, Portuguese, Spanish]
+    mutable: false
+  - name: domain
+    data_type: string
+    required: false
+    allowed_values: [carControl, generalControl, mediaControl, naviControl, phone, systemControl]
+    mutable: false
+  - name: intent
+    data_type: string
+    required: false
+    mutable: false
+  - name: affected_count
+    data_type: integer
+    required: true
+    minimum: 1
+    mutable: false
+  - name: detail
+    data_type: string
+    required: true
+    allow_blank: false
+    mutable: false

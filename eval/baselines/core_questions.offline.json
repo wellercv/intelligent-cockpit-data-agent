@@ -1,0 +1,17 @@
+{
+  "updated_at": "2026-07-30T08:41:43.384838+00:00",
+  "dataset": "core_questions.json",
+  "pass_rate": 1.0,
+  "tool_accuracy": 1.0,
+  "agent_accuracy": 1.0,
+  "intent_accuracy": 1.0,
+  "entity_accuracy": 1.0,
+  "answer_accuracy": 1.0,
+  "citation_accuracy": 1.0,
+  "average_ms": 450.62,
+  "p50_ms": 173.11,
+  "p95_ms": 1078.96,
+  "retrieval_recall_at_k": 1.0,
+  "retrieval_mrr": 1.0,
+  "judge_average": null
+}

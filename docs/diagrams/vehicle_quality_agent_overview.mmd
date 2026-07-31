@@ -1,0 +1,43 @@
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"#e7f1ed","primaryTextColor":"#17211d","primaryBorderColor":"#176b55","lineColor":"#65716b","secondaryColor":"#eef4f8","tertiaryColor":"#fff5e6","fontFamily":"Microsoft YaHei"},"flowchart":{"curve":"basis","nodeSpacing":34,"rankSpacing":44}}}%%
+flowchart TB
+    U[业务、测试与质量人员] --> E[统一交互入口<br/>问答 / 治理工作台 / API]
+    E --> S[任务编排 Agent<br/>意图、实体、分解、协调与重规划]
+
+    S -->|只读分析或知识问题| A[数据分析 Agent<br/>指标、案例、日志与知识]
+    S -->|治理查询或变更准备| G[数据治理 Agent<br/>质量问题、变更与版本]
+
+    A --> T[工具网关<br/>Tool Calling / MCP]
+    T --> D1[(ASR DuckDB<br/>92,301 Cases)]
+    T --> D2[(NLU DuckDB<br/>104,897 Samples 汇总<br/>11,885 Error Details)]
+    A --> K[Hybrid RAG<br/>指标口径、测试规范与历史问题]
+    A <--> M[两层任务记忆<br/>当前上下文与历史调查]
+    A -->|Observation| S
+
+    G --> I[质量问题、修改建议<br/>差异预览 Diff]
+    I -->|只查看问题| S
+    I -->|需要修改| H{用户人工确认<br/>是否接受修改?}
+    H -->|确认| V[应用版本化修改<br/>保留审计与回滚能力]
+    H -->|取消| X[保留原始数据]
+
+    S --> SYN[回答合成]
+    SYN --> Q{事实校验 Grounding<br/>数字、案例、版本与引用是否受支持?}
+    Q -->|通过| AR[可信分析或治理说明<br/>回答 + 引用 + 执行轨迹]
+    Q -->|不通过| FB[确定性降级<br/>或证据不足说明]
+
+    O[统一最终响应<br/>结果 / 状态 / 引用 / Trace / 下一步]
+    AR --> O
+    FB --> O
+    X --> O
+    V --> O
+
+    classDef actor fill:#176b55,color:#ffffff,stroke:#0e4f3e,stroke-width:2px;
+    classDef agent fill:#e7f1ed,color:#17211d,stroke:#176b55,stroke-width:2px;
+    classDef capability fill:#eef4f8,color:#17211d,stroke:#4d7894;
+    classDef governance fill:#fff5e6,color:#17211d,stroke:#b87520;
+    classDef store fill:#f7f9f7,color:#17211d,stroke:#65716b;
+    class U actor;
+    class S,A,G agent;
+    class E,T,K,M,SYN,AR,FB,O capability;
+    class Q,H governance;
+    class I,V,X governance;
+    class D1,D2 store;

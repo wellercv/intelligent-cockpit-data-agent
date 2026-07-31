@@ -1,0 +1,82 @@
+[
+  {
+    "case_id": "overview",
+    "question": "当前一共接入多少条数据？",
+    "expected_tools": [
+      "dataset_overview"
+    ],
+    "expected_agents": [
+      "analysis_agent"
+    ],
+    "expected_intent": "metric_analysis",
+    "answer_contains": [
+      "92,301",
+      "5,118",
+      "结果未知 **1**"
+    ],
+    "min_sources": 1
+  },
+  {
+    "case_id": "multi-step",
+    "question": "比较德语和法语 mediaControl 的错误率，并分别列出各自 3 条错误案例",
+    "expected_tools": [
+      "compare_languages",
+      "search_cases"
+    ],
+    "expected_agents": [
+      "analysis_agent"
+    ],
+    "expected_intent": "mixed",
+    "expected_entities": {
+      "languages": [
+        "French",
+        "German"
+      ],
+      "domains": [
+        "mediaControl"
+      ],
+      "metric": "error_rate",
+      "metrics": [
+        "error_rate"
+      ]
+    },
+    "answer_contains": [
+      "German",
+      "French",
+      "ASR #"
+    ],
+    "min_sources": 2
+  },
+  {
+    "case_id": "quality-issues",
+    "question": "当前数据有哪些质量问题？",
+    "expected_tools": [
+      "governance_scan"
+    ],
+    "expected_agents": [
+      "data_governance_agent"
+    ],
+    "expected_intent": "data_governance",
+    "answer_contains": [
+      "44",
+      "BLANK_NOT_ALLOWED"
+    ],
+    "min_sources": 1
+  },
+  {
+    "case_id": "unsupported-weather",
+    "question": "北京今天天气怎么样？",
+    "expected_tools": [
+      "platform_capabilities"
+    ],
+    "expected_agents": [
+      "analysis_agent"
+    ],
+    "expected_intent": "out_of_scope",
+    "answer_contains": [
+      "超出了当前已注册的数据范围",
+      "没有生成无来源答案"
+    ],
+    "min_sources": 1
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "case_id": "overview",
+    "question": "当前一共接入多少条数据？",
+    "expected_tools": [
+      "dataset_overview"
+    ],
+    "expected_agents": [
+      "analysis_agent"
+    ],
+    "expected_intent": "metric_analysis",
+    "answer_contains": [
+      "92,301"
+    ],
+    "min_sources": 1
+  }
+]

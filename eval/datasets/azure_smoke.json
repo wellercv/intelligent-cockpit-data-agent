@@ -1,0 +1,77 @@
+[
+  {
+    "case_id": "azure-metric-ranking",
+    "question": "七种语言中哪个错误率最高？",
+    "tags": ["azure-smoke", "metric", "ranking"],
+    "expected_tools": ["rank_dimensions"],
+    "expected_agents": ["analysis_agent"],
+    "expected_intent": "metric_analysis",
+    "expected_entities": {
+      "metric": "error_rate",
+      "metrics": ["error_rate"]
+    },
+    "answer_contains": ["Portuguese", "10.05"],
+    "min_sources": 1
+  },
+  {
+    "case_id": "azure-case-search",
+    "question": "找出英语中包含 TuneIn 的错误案例",
+    "tags": ["azure-smoke", "case"],
+    "expected_tools": ["search_cases"],
+    "expected_agents": ["analysis_agent"],
+    "expected_intent": "case_investigation",
+    "expected_entities": {"languages": ["English"]},
+    "answer_contains": ["44", "TuneIn"],
+    "min_sources": 1
+  },
+  {
+    "case_id": "azure-knowledge",
+    "question": "准确率指标是怎么计算的？",
+    "tags": ["azure-smoke", "knowledge"],
+    "expected_tools": ["search_knowledge"],
+    "expected_agents": ["analysis_agent"],
+    "expected_intent": "knowledge_qa",
+    "expected_entities": {
+      "metric": "accuracy",
+      "metrics": ["accuracy"]
+    },
+    "answer_contains": ["correct / total * 100"],
+    "min_sources": 1
+  },
+  {
+    "case_id": "azure-governance",
+    "question": "当前数据有哪些质量问题？",
+    "tags": ["azure-smoke", "governance"],
+    "expected_tools": ["governance_scan"],
+    "expected_agents": ["data_governance_agent"],
+    "expected_intent": "data_governance",
+    "answer_contains": ["44", "BLANK_NOT_ALLOWED"],
+    "min_sources": 1
+  },
+  {
+    "case_id": "azure-mixed-replan",
+    "question": "比较德语和法语 mediaControl 的错误率，并分别列出各自 3 条错误案例",
+    "tags": ["azure-smoke", "mixed", "replan"],
+    "expected_tools": ["compare_languages", "search_cases"],
+    "expected_agents": ["analysis_agent"],
+    "expected_intent": "mixed",
+    "expected_entities": {
+      "languages": ["French", "German"],
+      "domains": ["mediaControl"],
+      "metric": "error_rate",
+      "metrics": ["error_rate"]
+    },
+    "answer_contains": ["German", "French", "ASR #"],
+    "min_sources": 2
+  },
+  {
+    "case_id": "azure-out-of-scope",
+    "question": "北京今天天气怎么样？",
+    "tags": ["azure-smoke", "out-of-scope"],
+    "expected_tools": ["platform_capabilities"],
+    "expected_agents": ["analysis_agent"],
+    "expected_intent": "out_of_scope",
+    "answer_contains": ["超出了当前已注册的数据范围", "没有生成无来源答案"],
+    "min_sources": 1
+  }
+]

@@ -1,0 +1,62 @@
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"#e7f1ed","primaryTextColor":"#17211d","primaryBorderColor":"#176b55","lineColor":"#65716b","secondaryColor":"#eef4f8","tertiaryColor":"#fff5e6","fontFamily":"Microsoft YaHei"},"flowchart":{"curve":"basis","nodeSpacing":30,"rankSpacing":38}}}%%
+flowchart TB
+    U[业务、测试与质量人员] --> API[统一入口<br/>网页 / API / 命令行]
+    API --> S[任务编排 Agent<br/>意图、实体、计划、观察与重规划]
+
+    S -->|只读分析| A[数据分析 Agent]
+    S -->|治理任务| G[数据治理 Agent]
+
+    subgraph ANALYSIS[数据分析证据通道]
+        direction LR
+        A --> TG[工具网关 / FastMCP<br/>校验、缓存、超时、重试与熔断]
+        TG --> AT[指标、比较、排名<br/>案例与日志工具]
+        AT --> DB1[(ASR DuckDB<br/>CSV / JSON)]
+        AT --> DB2[(NLU DuckDB<br/>Excel / Nested JSON)]
+
+        A --> QR[确定性问题改写]
+        QR --> HR[FTS5/BM25 + ChromaDB<br/>RRF 融合 + 轻量重排]
+        HR --> KB[(业务知识库)]
+
+        A <--> WM[(SQLite 工作记忆)]
+        A <--> IM[(ChromaDB 调查记忆)]
+
+        AT --> OBS[结构化 Observation<br/>数据、来源、警告与耗时]
+        HR --> OBS
+    end
+    OBS -->|证据反馈| S
+
+    subgraph GOVERNANCE[人机协同数据治理]
+        direction LR
+        G --> DC[数据契约与质量检查]
+        DC --> CR[质量问题、修改建议<br/>差异预览 Diff]
+        CR -->|只查看问题| GOBS[治理 Observation]
+        CR -->|需要修改| HA{用户人工确认<br/>是否接受修改?}
+        HA -->|确认| DV[应用版本化修改<br/>审计且可回滚]
+        HA -->|取消| KEEP[保留原始数据]
+    end
+    GOBS -->|证据反馈| S
+
+    S --> SYN[回答合成]
+    SYN --> GR{事实校验 Grounding<br/>证据是否支持?}
+    GR -->|通过| ANSWER[可信回答<br/>证据 + 引用 + Trace]
+    GR -->|不通过| FALLBACK[确定性降级<br/>或证据不足说明]
+
+    OUT[统一最终响应<br/>结果 / 状态 / 引用 / Trace / 下一步]
+    ANSWER --> OUT
+    FALLBACK --> OUT
+    KEEP --> OUT
+    DV --> OUT
+
+    OUT -.-> EV[离线质量评测<br/>Agent Eval / Retrieval Eval / 可选 LLM-as-Judge]
+
+    classDef actor fill:#176b55,color:#ffffff,stroke:#0e4f3e,stroke-width:2px;
+    classDef agent fill:#e7f1ed,color:#17211d,stroke:#176b55,stroke-width:2px;
+    classDef capability fill:#eef4f8,color:#17211d,stroke:#4d7894;
+    classDef governance fill:#fff5e6,color:#17211d,stroke:#b87520;
+    classDef store fill:#f7f9f7,color:#17211d,stroke:#65716b;
+    class U actor;
+    class S,A,G agent;
+    class API,TG,AT,QR,HR,OBS,SYN,ANSWER,FALLBACK,OUT,EV capability;
+    class GR,HA governance;
+    class DC,CR,GOBS,DV,KEEP governance;
+    class DB1,DB2,KB,WM,IM store;

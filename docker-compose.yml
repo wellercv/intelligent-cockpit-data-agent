@@ -1,0 +1,50 @@
+services:
+  api:
+    build: .
+    command: ["data-agent", "serve", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      DATA_AGENT_DATA_ROOT: /workspace
+      DATA_AGENT_NLU_REPORT: /workspace/离线NLU重测报告_20260710.xlsx
+      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-}
+      AZURE_OPENAI_DEPLOYMENT: ${AZURE_OPENAI_DEPLOYMENT:-}
+      AZURE_OPENAI_MODEL_FAMILY: ${AZURE_OPENAI_MODEL_FAMILY:-gpt-5.4-mini}
+      AZURE_OPENAI_API_MODE: ${AZURE_OPENAI_API_MODE:-v1}
+      AZURE_OPENAI_REASONING_EFFORT: ${AZURE_OPENAI_REASONING_EFFORT:-low}
+      AZURE_OPENAI_MAX_COMPLETION_TOKENS: ${AZURE_OPENAI_MAX_COMPLETION_TOKENS:-8192}
+      AZURE_OPENAI_EMBEDDING_DEPLOYMENT: ${AZURE_OPENAI_EMBEDDING_DEPLOYMENT:-}
+      AZURE_OPENAI_API_VERSION: ${AZURE_OPENAI_API_VERSION:-2024-10-21}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../:/workspace:ro
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  ui:
+    build: .
+    command: ["data-agent", "ui", "--host", "0.0.0.0", "--port", "8501"]
+    environment:
+      DATA_AGENT_DATA_ROOT: /workspace
+      DATA_AGENT_NLU_REPORT: /workspace/离线NLU重测报告_20260710.xlsx
+      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-}
+      AZURE_OPENAI_DEPLOYMENT: ${AZURE_OPENAI_DEPLOYMENT:-}
+      AZURE_OPENAI_MODEL_FAMILY: ${AZURE_OPENAI_MODEL_FAMILY:-gpt-5.4-mini}
+      AZURE_OPENAI_API_MODE: ${AZURE_OPENAI_API_MODE:-v1}
+      AZURE_OPENAI_REASONING_EFFORT: ${AZURE_OPENAI_REASONING_EFFORT:-low}
+      AZURE_OPENAI_MAX_COMPLETION_TOKENS: ${AZURE_OPENAI_MAX_COMPLETION_TOKENS:-8192}
+      AZURE_OPENAI_EMBEDDING_DEPLOYMENT: ${AZURE_OPENAI_EMBEDDING_DEPLOYMENT:-}
+      AZURE_OPENAI_API_VERSION: ${AZURE_OPENAI_API_VERSION:-2024-10-21}
+    ports:
+      - "8501:8501"
+    volumes:
+      - ../:/workspace:ro
+      - ./data:/app/data
+    depends_on:
+      api:
+        condition: service_healthy

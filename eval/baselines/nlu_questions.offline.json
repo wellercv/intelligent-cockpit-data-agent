@@ -1,0 +1,17 @@
+{
+  "updated_at": "2026-07-31T03:58:20.406272+00:00",
+  "dataset": "nlu_questions.json",
+  "pass_rate": 1.0,
+  "tool_accuracy": 1.0,
+  "agent_accuracy": 1.0,
+  "intent_accuracy": 1.0,
+  "entity_accuracy": 1.0,
+  "answer_accuracy": 1.0,
+  "citation_accuracy": 1.0,
+  "average_ms": 223.51,
+  "p50_ms": 138.34,
+  "p95_ms": 575.43,
+  "retrieval_recall_at_k": 1.0,
+  "retrieval_mrr": 1.0,
+  "judge_average": null
+}
