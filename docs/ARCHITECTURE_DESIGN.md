@@ -1016,8 +1016,8 @@ flowchart LR
 
 - Ruff 检查语法、未定义符号、未使用导入和 import 顺序；
 - Mypy 检查 Schemas、Safety、Grounding、Export 和 Tool Runtime 稳定核心；
-- GitHub Actions 在无私有业务数据环境运行 40 条测试、依赖检查、漏洞扫描和 Docker Demo 健康检查；
-- 本地脚本串行执行 78 条测试及核心/银标/NLU Agent 回归；
+- GitHub Actions 在无私有业务数据环境运行 41 条测试、依赖检查、漏洞扫描和 Docker Demo 健康检查；
+- 本地脚本串行执行 79 条测试及核心/银标/NLU Agent 回归；
 - 显式 Synthetic Demo 生成 42 条 ASR 与 14 条 NLU fixture，使用独立运行时目录且不会污染真实 Warehouse；
 - Dependabot 每周监控 Python 与 GitHub Actions 依赖；
 - Azure Planner/Composer 故障注入验证确定性 fallback 与 Trace 标记；

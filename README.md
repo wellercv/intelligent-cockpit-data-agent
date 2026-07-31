@@ -19,7 +19,7 @@
 | 事实与知识 | DuckDB 精确计算 + FTS5/BM25、ChromaDB、RRF Hybrid RAG |
 | 可信与治理 | 数字/实体/来源 Grounding；Diff 确认、不可变 Patch Version、Rollback |
 | 可靠性 | Tool Runtime 缓存/超时/重试/熔断；Azure Planner/Composer 确定性 fallback |
-| 评测 | 78/78 测试、25/25 核心、62/62 银标、7/7 NLU、18/18 Retrieval、Azure smoke Judge 4.7/5 |
+| 评测 | 79/79 测试、25/25 核心、62/62 银标、7/7 NLU、18/18 Retrieval、Azure smoke Judge 4.7/5 |
 | 工程门禁 | GitHub Actions、Ruff、Mypy、pip-audit、Dependabot、Docker Demo 健康检查 |
 
 ## 设计文档
@@ -157,7 +157,7 @@ data-agent eval --update-baseline
 data-agent eval
 ```
 
-当前代码测试：`78/78 passed`。核心 Agent 离线评测：`25/25 passed`；另有 `62/62` 合成银标和 `7/7` NLU/跨 Provider 用例通过。NLU 回归覆盖整体指标、语言/Domain 排名、错误分布、错误明细、标签治理和 ASR+NLU 联合查询，Intent、Entity、Tool、Agent、Answer 和 Citation Accuracy 均为 `100%`。银标由模板生成，不计作人工标注，也不代表生产准确率。
+当前代码测试：`79/79 passed`。核心 Agent 离线评测：`25/25 passed`；另有 `62/62` 合成银标和 `7/7` NLU/跨 Provider 用例通过。NLU 回归覆盖整体指标、语言/Domain 排名、错误分布、错误明细、标签治理和 ASR+NLU 联合查询，Intent、Entity、Tool、Agent、Answer 和 Citation Accuracy 均为 `100%`。银标由模板生成，不计作人工标注，也不代表生产准确率。
 
 Azure `gpt-5.4-mini` 已通过 Microsoft Entra ID 完成真实在线验收：历史完整回归的 25 条确定性指标全部通过；当前 6 条低成本 smoke 全部通过，LLM-as-Judge 平均 `4.7/5`、无策略违规、24 次调用、119,181 tokens、P95 `6004 ms`、估算 `$0.123`。历史完整回归未持久化可恢复的 Judge 分，因此不为它补写 Judge 结论。Azure Embedding 未部署且不是当前阻塞项；离线 Hybrid RAG 已通过 18 条专项评测。
 
@@ -169,7 +169,7 @@ Azure `gpt-5.4-mini` 已通过 Microsoft Entra ID 完成真实在线验收：历
 
 项目采用两层验证，避免公开 CI 依赖或复制私有业务原始数据：
 
-- GitHub Actions：Ruff、Mypy 核心类型检查、40 条无业务数据测试、依赖一致性、`pip-audit` 和 Docker Demo 启动/健康检查；
+- GitHub Actions：Ruff、Mypy 核心类型检查、41 条无业务数据测试、依赖一致性、`pip-audit` 和 Docker Demo 启动/健康检查；
 - 本地全量门禁：Ruff、Mypy、代码测试、25 条核心 Agent 回归、62 条合成银标回归、7 条 NLU 回归、依赖一致性和漏洞扫描，严格串行执行以隔离本地治理状态；
 - Dependabot：每周检查 Python 与 GitHub Actions 依赖更新。
 
@@ -177,7 +177,7 @@ Azure `gpt-5.4-mini` 已通过 Microsoft Entra ID 完成真实在线验收：历
 .\scripts\quality_gate.ps1
 ```
 
-只运行静态检查和 78 条代码测试：
+只运行静态检查和 79 条代码测试：
 
 ```powershell
 .\scripts\quality_gate.ps1 -SkipEvaluations

@@ -29,7 +29,12 @@ class Settings:
 
     @classmethod
     def load(cls, project_root: Path | None = None) -> "Settings":
-        root = (project_root or Path(__file__).resolve().parents[2]).resolve()
+        configured_project_root = os.environ.get("DATA_AGENT_PROJECT_ROOT")
+        root = (
+            project_root
+            or (Path(configured_project_root) if configured_project_root else None)
+            or Path(__file__).resolve().parents[2]
+        ).resolve()
         config_path = root / "config" / "sources.yaml"
         payload = yaml.safe_load(config_path.read_text(encoding="utf-8"))
         demo_mode = os.environ.get("DATA_AGENT_DEMO_MODE", "").casefold() in {

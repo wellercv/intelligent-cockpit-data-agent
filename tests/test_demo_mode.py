@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 from pathlib import Path
 
 from data_insight.config import Settings
@@ -55,6 +56,22 @@ def test_settings_loads_explicit_demo_mode(monkeypatch, tmp_path: Path):
     assert settings.data_root == (tmp_path / "demo").resolve()
     assert settings.nlu_report_path == (tmp_path / "demo" / "demo_nlu_report.xlsx")
     assert settings.runtime_dir == settings.project_root / "data" / "demo_runtime"
+
+
+def test_settings_loads_project_root_from_environment(monkeypatch, tmp_path: Path):
+    installed_root = tmp_path / "installed-app"
+    config_dir = installed_root / "config"
+    config_dir.mkdir(parents=True)
+    source_config = Path(__file__).parents[1] / "config" / "sources.yaml"
+    shutil.copyfile(source_config, config_dir / "sources.yaml")
+    monkeypatch.setenv("DATA_AGENT_PROJECT_ROOT", str(installed_root))
+    monkeypatch.setenv("DATA_AGENT_DEMO_MODE", "1")
+
+    settings = Settings.load()
+
+    assert settings.project_root == installed_root.resolve()
+    assert settings.data_root == installed_root / "data" / "demo_sources"
+    assert settings.runtime_dir == installed_root / "data" / "demo_runtime"
 
 
 def test_demo_mode_runs_cross_provider_agent_without_business_data(tmp_path: Path):
