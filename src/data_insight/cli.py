@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -30,6 +31,13 @@ def build_parser() -> argparse.ArgumentParser:
 
     subparsers.add_parser("ingest", help="rebuild registered ASR and NLU warehouses")
     subparsers.add_parser("health", help="show provider and skill readiness")
+
+    demo = subparsers.add_parser(
+        "demo",
+        help="start the workbench with deterministic synthetic ASR/NLU data",
+    )
+    demo.add_argument("--host", default="127.0.0.1")
+    demo.add_argument("--port", type=int, default=8501)
 
     evaluate = subparsers.add_parser("eval", help="run end-to-end agent evaluation")
     evaluate.add_argument("--dataset", default="core_questions.json")
@@ -73,7 +81,15 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> int:
     args = build_parser().parse_args()
+    if args.command == "demo":
+        os.environ["DATA_AGENT_DEMO_MODE"] = "1"
     settings = Settings.load()
+    if args.command == "demo":
+        print(
+            "Starting Synthetic Demo mode. Displayed figures are generated fixtures, "
+            "not business results."
+        )
+        return _run_ui(settings, args.host, args.port)
     if args.command == "ingest":
         asr_report = ASRWarehouse(settings).rebuild()
         nlu_provider = NLUEvaluationProvider(settings)
@@ -130,25 +146,7 @@ def main() -> int:
         uvicorn.run("data_insight.api:app", host=args.host, port=args.port, reload=False)
         return 0
     if args.command == "ui":
-        command = [
-            sys.executable,
-            "-m",
-            "streamlit",
-            "run",
-            str(settings.project_root / "app.py"),
-            "--server.address",
-            args.host,
-            "--server.port",
-            str(args.port),
-            "--server.headless",
-            "true",
-            "--server.fileWatcherType",
-            "none",
-        ]
-        try:
-            return subprocess.call(command, cwd=settings.project_root)
-        except KeyboardInterrupt:
-            return 0
+        return _run_ui(settings, args.host, args.port)
     if args.command == "mcp":
         from data_insight.mcp_server import create_mcp_server
 
@@ -195,6 +193,28 @@ def main() -> int:
             print(json.dumps(result, ensure_ascii=False, indent=2))
             return 0
     return 2
+
+
+def _run_ui(settings: Settings, host: str, port: int) -> int:
+    command = [
+        sys.executable,
+        "-m",
+        "streamlit",
+        "run",
+        str(settings.project_root / "app.py"),
+        "--server.address",
+        host,
+        "--server.port",
+        str(port),
+        "--server.headless",
+        "true",
+        "--server.fileWatcherType",
+        "none",
+    ]
+    try:
+        return subprocess.call(command, cwd=settings.project_root)
+    except KeyboardInterrupt:
+        return 0
 
 
 if __name__ == "__main__":

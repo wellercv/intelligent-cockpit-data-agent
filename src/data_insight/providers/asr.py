@@ -79,6 +79,7 @@ class MultilingualASRProvider(DataProvider):
         return {
             "provider": self.name,
             "ready": True,
+            "synthetic_demo": self.settings.demo_mode,
             "cases": self.ingest_report.case_count,
             "correct": self.ingest_report.correct_count,
             "errors": self.ingest_report.error_count,
@@ -130,7 +131,12 @@ class MultilingualASRProvider(DataProvider):
             ],
             warnings=[
                 "The request is outside the registered business-data scope; no unsupported fact was generated."
-            ],
+            ]
+            + (
+                ["Synthetic demo data is active; figures are not business results."]
+                if self.settings.demo_mode
+                else []
+            ),
         )
 
     def _tool_dataset_overview(self, call: ToolCall) -> ToolObservation:
@@ -449,7 +455,16 @@ class MultilingualASRProvider(DataProvider):
         return sources[:50]
 
     def _quality_warning(self) -> List[str]:
-        return [f"The source catalog contains {self.ingest_report.issue_count} data-quality issue(s); use data_quality for details."] if self.ingest_report.issue_count else []
+        warnings = (
+            [f"The source catalog contains {self.ingest_report.issue_count} data-quality issue(s); use data_quality for details."]
+            if self.ingest_report.issue_count
+            else []
+        )
+        if self.settings.demo_mode:
+            warnings.append(
+                "Synthetic demo data is active; figures are not business results."
+            )
+        return warnings
 
     def _scope_warnings(self, scope: str, language: str | None, domain: str | None) -> List[str]:
         warnings = self._quality_warning()

@@ -104,7 +104,7 @@ Agent Engine 与业务文件格式解耦。当前已完成 ASR CSV/JSON Provider
 | CSV Case 导入完整性 | 92,301 | 92,301 |
 | 语言覆盖 | 7 | 7 |
 | Domain 覆盖 | 6 | 6 |
-| 代码自动测试 | 全部通过 | 74/74 |
+| 代码自动测试 | 全部通过 | 78/78 |
 | NLU 报告导入完整性 | 104,897 汇总 + 11,885 错误明细 | 通过 |
 | NLU Provider 回归集 | 全部通过 | 7/7 |
 | 核心 Multi-Agent 回归集 | 全部通过 | 25/25 |
@@ -372,6 +372,8 @@ Agent Engine 与业务文件格式解耦。当前已完成 ASR CSV/JSON Provider
 | FR-OPS-009 | 单机版仅记录本地操作标识和 Audit，不引入企业身份、RBAC 或电子签名 | P0 | 已实现 |
 | FR-OPS-010 | GitHub Actions 执行 Ruff、Mypy、无数据测试、依赖和镜像构建门禁 | P1 | 已通过公开仓库远程运行 |
 | FR-OPS-011 | CD、并发压力测试和生产部署 | P2 | 下一阶段 |
+| FR-OPS-012 | 无真实业务数据时显式生成隔离的 Synthetic Demo 并启动完整工作台 | P1 | 已实现并通过 Docker 健康检查 |
+| FR-OPS-013 | pip-audit 与 Dependabot 依赖供应链门禁 | P1 | 已实现；ChromaDB 单条不可达服务端漏洞有记录的临时豁免 |
 
 ---
 

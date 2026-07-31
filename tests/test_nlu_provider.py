@@ -157,6 +157,7 @@ def test_nlu_provider_ingests_summary_and_detail(nlu_provider: NLUEvaluationProv
         "provider": "nlu_evaluation",
         "ready": True,
         "optional": True,
+        "synthetic_demo": False,
         "source": "nlu-report.xlsx",
         "samples": 10,
         "model_errors": 3,

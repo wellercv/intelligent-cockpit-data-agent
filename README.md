@@ -19,8 +19,8 @@
 | 事实与知识 | DuckDB 精确计算 + FTS5/BM25、ChromaDB、RRF Hybrid RAG |
 | 可信与治理 | 数字/实体/来源 Grounding；Diff 确认、不可变 Patch Version、Rollback |
 | 可靠性 | Tool Runtime 缓存/超时/重试/熔断；Azure Planner/Composer 确定性 fallback |
-| 评测 | 74/74 测试、25/25 核心、62/62 银标、7/7 NLU、18/18 Retrieval、Azure smoke Judge 4.7/5 |
-| 工程门禁 | GitHub Actions 工作流、Ruff、Mypy、Docker 构建任务、本地全量质量脚本 |
+| 评测 | 78/78 测试、25/25 核心、62/62 银标、7/7 NLU、18/18 Retrieval、Azure smoke Judge 4.7/5 |
+| 工程门禁 | GitHub Actions、Ruff、Mypy、pip-audit、Dependabot、Docker Demo 健康检查 |
 
 ## 设计文档
 
@@ -35,6 +35,7 @@
 | [Azure LLM 接入教程](docs/LLM_API_SETUP.md) | 从申请配置到在线评测的操作指南 |
 | [业务素材接入指南](docs/MATERIALS_GUIDE.md) | 数据契约、知识文档、业务规范和评测集的接入方式 |
 | [秋招简历与面试指南](docs/RESUME_GUIDE_CN.md) | 可验证简历表述、项目介绍、面试深挖和禁止过度承诺项 |
+| [安全策略](SECURITY.md) | 漏洞报告方式、当前安全控制和临时依赖风险接受范围 |
 
 修改总说明书后可重新生成 Word：
 
@@ -99,7 +100,22 @@ python docs/build_project_docx.py
 
 当前不包含 TN 规则、错误自动分诊、Experiment Agent 或 Reporting Agent。后两者只有在获得第二批版本数据或正式报告签审需求后才值得增加。
 
-## 快速开始
+## 零数据快速演示
+
+公开仓库不包含真实业务原始数据。首次克隆后可直接生成确定性合成 fixture，运行与真实模式相同的 Agent、Provider、RAG、Grounding、治理和 Trace 链路：
+
+```powershell
+git clone https://github.com/wellercv/intelligent-cockpit-data-agent.git
+cd intelligent-cockpit-data-agent
+py -3.13 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+data-agent demo
+```
+
+打开 <http://127.0.0.1:8501>。页面会显著显示 **Synthetic Demo**，当前 fixture 为 42 条 ASR Case 和 14 条 NLU Sample；这些数字只验证系统能力，不能作为业务结果或简历效果指标。
+
+## 真实数据运行
 
 建议 Python 3.11+。
 
@@ -116,6 +132,8 @@ python -m pip install -e ".[dev]"
 ```powershell
 data-agent ingest
 ```
+
+真实模式必须保持 `DATA_AGENT_DEMO_MODE=0`，并通过 `DATA_AGENT_DATA_ROOT`、`DATA_AGENT_NLU_REPORT` 或 `config/sources.yaml` 指向授权数据。
 
 运行测试：
 
@@ -139,7 +157,7 @@ data-agent eval --update-baseline
 data-agent eval
 ```
 
-当前代码测试：`74/74 passed`。核心 Agent 离线评测：`25/25 passed`；另有 `62/62` 合成银标和 `7/7` NLU/跨 Provider 用例通过。NLU 回归覆盖整体指标、语言/Domain 排名、错误分布、错误明细、标签治理和 ASR+NLU 联合查询，Intent、Entity、Tool、Agent、Answer 和 Citation Accuracy 均为 `100%`。银标由模板生成，不计作人工标注，也不代表生产准确率。
+当前代码测试：`78/78 passed`。核心 Agent 离线评测：`25/25 passed`；另有 `62/62` 合成银标和 `7/7` NLU/跨 Provider 用例通过。NLU 回归覆盖整体指标、语言/Domain 排名、错误分布、错误明细、标签治理和 ASR+NLU 联合查询，Intent、Entity、Tool、Agent、Answer 和 Citation Accuracy 均为 `100%`。银标由模板生成，不计作人工标注，也不代表生产准确率。
 
 Azure `gpt-5.4-mini` 已通过 Microsoft Entra ID 完成真实在线验收：历史完整回归的 25 条确定性指标全部通过；当前 6 条低成本 smoke 全部通过，LLM-as-Judge 平均 `4.7/5`、无策略违规、24 次调用、119,181 tokens、P95 `6004 ms`、估算 `$0.123`。历史完整回归未持久化可恢复的 Judge 分，因此不为它补写 Judge 结论。Azure Embedding 未部署且不是当前阻塞项；离线 Hybrid RAG 已通过 18 条专项评测。
 
@@ -151,14 +169,15 @@ Azure `gpt-5.4-mini` 已通过 Microsoft Entra ID 完成真实在线验收：历
 
 项目采用两层验证，避免公开 CI 依赖或复制私有业务原始数据：
 
-- GitHub Actions：Ruff、Mypy 核心类型检查、36 条无业务数据单元测试、依赖一致性检查和 Docker 镜像构建已通过；NLU 使用运行时生成的合成 Excel fixture；
-- 本地全量门禁：Ruff、Mypy、74 条代码测试、25 条核心 Agent 回归、62 条合成银标回归、7 条 NLU 回归和依赖检查，严格串行执行以隔离本地治理状态。
+- GitHub Actions：Ruff、Mypy 核心类型检查、40 条无业务数据测试、依赖一致性、`pip-audit` 和 Docker Demo 启动/健康检查；
+- 本地全量门禁：Ruff、Mypy、代码测试、25 条核心 Agent 回归、62 条合成银标回归、7 条 NLU 回归、依赖一致性和漏洞扫描，严格串行执行以隔离本地治理状态；
+- Dependabot：每周检查 Python 与 GitHub Actions 依赖更新。
 
 ```powershell
 .\scripts\quality_gate.ps1
 ```
 
-只运行静态检查和 74 条代码测试：
+只运行静态检查和 78 条代码测试：
 
 ```powershell
 .\scripts\quality_gate.ps1 -SkipEvaluations
@@ -284,7 +303,7 @@ data/investigation_chroma/ ChromaDB 历史调查记忆
 
 ## Docker
 
-在 `data_insight_agent` 目录运行：
+在仓库目录运行。Compose 默认启动明确标注的 Synthetic Demo：
 
 ```powershell
 docker compose up --build
@@ -293,6 +312,13 @@ docker compose up --build
 - API：<http://127.0.0.1:8000/docs>
 - UI：<http://127.0.0.1:8501>
 
-Compose 将上一级 `ASR_agent` 目录只读挂载到 `/workspace`，原始数据不会被容器修改。
+切换真实数据前，在 PowerShell 中设置：
 
-Dockerfile 已由 GitHub Actions 在 Linux runner 完成镜像构建验证；本机只有需要实际启动 Compose 时才需要安装 Docker Desktop。
+```powershell
+$env:DATA_AGENT_DEMO_MODE="0"
+docker compose up --build
+```
+
+Compose 将上一级数据目录只读挂载到 `/workspace`，原始数据不会被容器修改。
+
+Dockerfile 由 GitHub Actions 在 Linux runner 完成镜像构建，并实际启动容器校验 `/health` 中的 Demo ASR/NLU 指标；本机只有需要运行 Compose 时才需要安装 Docker Desktop。

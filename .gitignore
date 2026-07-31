@@ -10,6 +10,8 @@ data/*.duckdb
 data/knowledge_chroma/
 data/investigation_chroma/
 data/azure_auth_record.json
+data/demo_sources/
+data/demo_runtime/
 knowledge/**/*.pdf
 knowledge/**/*.docx
 .env

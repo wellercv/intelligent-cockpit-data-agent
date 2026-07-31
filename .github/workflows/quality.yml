@@ -45,6 +45,11 @@ jobs:
       - name: Dependency consistency
         run: python -m pip check
 
+      - name: Dependency vulnerability audit
+        run: >-
+          python -m pip_audit --skip-editable
+          --ignore-vuln PYSEC-2026-311
+
   container-build:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -54,3 +59,40 @@ jobs:
 
       - name: Build production image
         run: docker build --tag data-insight-agent:ci .
+
+      - name: Start synthetic demo container
+        run: >-
+          docker run --detach --name data-agent-ci
+          --publish 8000:8000 data-insight-agent:ci
+
+      - name: Smoke test demo health
+        run: |
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8000/health > health.json; then
+              break
+            fi
+            sleep 2
+          done
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          payload = json.loads(Path("health.json").read_text())
+          providers = {
+              item["provider"]: item
+              for item in payload["provider"]["providers"]
+          }
+          assert payload["status"] == "ok"
+          assert providers["multilingual_asr"]["synthetic_demo"] is True
+          assert providers["multilingual_asr"]["cases"] == 42
+          assert providers["nlu_evaluation"]["synthetic_demo"] is True
+          assert providers["nlu_evaluation"]["samples"] == 14
+          PY
+
+      - name: Show container logs on failure
+        if: failure()
+        run: docker logs data-agent-ci
+
+      - name: Stop demo container
+        if: always()
+        run: docker rm --force data-agent-ci || true

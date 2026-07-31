@@ -88,19 +88,43 @@ def get_service(mode: str) -> AgentService:
     return AgentService(mode=mode)
 
 
-def render_header() -> None:
+def render_header(mode: str) -> None:
+    service = get_service(mode)
+    provider_states = {
+        item["provider"]: item
+        for item in service.health()["provider"]["providers"]
+    }
+    asr = provider_states.get("multilingual_asr", {})
+    nlu = provider_states.get("nlu_evaluation", {})
+    business_providers = sum(
+        bool(item.get("ready")) for item in (asr, nlu)
+    )
+    asr_cases = int(asr.get("cases", 0))
+    nlu_samples = int(nlu.get("samples", 0))
+    languages = len(set(asr.get("languages", [])) | set(nlu.get("languages", [])))
+    domains = len(set(asr.get("domains", [])) | set(nlu.get("domains", [])))
+    demo_mode = service.settings.demo_mode
+    scope_label = "Synthetic Demo" if demo_mode else "Registered Business Data"
+    subtitle = (
+        "当前使用确定性生成的 ASR/NLU 合成数据，仅用于验证完整 Agent 链路，"
+        "所有数字都不是业务结果。"
+        if demo_mode
+        else "当前接入七语种 ASR 明细和 NLU 离线重测报告两个真实 Provider，"
+        "变更由用户检查 Diff 后显式确认并生成可回滚版本。"
+    )
     st.markdown(
-        """
+        f"""
         <div class="masthead">
           <div class="eyebrow">Intelligent Cockpit Voice Quality Data Agent</div>
           <div class="title">智能座舱多语言语音质量数据分析与治理 Agent</div>
-                    <div class="subtitle">任务编排 Agent 协调只读数据分析 Agent 与数据治理 Agent；当前接入七语种 ASR 明细和 NLU 离线重测报告两个真实 Provider，变更由用户检查 Diff 后显式确认并生成可回滚版本。</div>
+          <div class="subtitle">{subtitle}</div>
           <div class="scope-strip">
-                        <span><strong>2</strong> Providers</span>
-                        <span><strong>92,301</strong> ASR Cases</span>
-                        <span><strong>104,897</strong> NLU Samples</span>
-            <span><strong>7</strong> Languages</span>
-            <span><strong>6</strong> Domains</span>
+            <span><strong>{scope_label}</strong></span>
+            <span><strong>{business_providers}</strong> Providers</span>
+            <span><strong>{asr_cases:,}</strong> ASR Cases</span>
+            <span><strong>{nlu_samples:,}</strong> NLU Samples</span>
+            <span><strong>{languages}</strong> Languages</span>
+            <span><strong>{domains}</strong> Domains</span>
             <span>DuckDB + LangGraph + FTS5 + SQLite</span>
           </div>
         </div>
@@ -510,6 +534,11 @@ def render_governance(mode: str) -> None:
 
 def render_system(mode: str) -> None:
     service = get_service(mode)
+    if service.settings.demo_mode:
+        st.warning(
+            "Synthetic Demo 模式：当前 ASR/NLU 数据由代码确定性生成，"
+            "仅用于功能验证，不代表真实业务质量。"
+        )
     health = service.health()
     provider = health["provider"]
     provider_states = {
@@ -727,8 +756,8 @@ def render_system(mode: str) -> None:
 
 
 def main() -> None:
-    render_header()
     mode = sidebar()
+    render_header(mode)
     view = st.segmented_control(
         "工作区",
         options=("分析工作台", "数据治理", "Agent Trace", "系统与评测"),

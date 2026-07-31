@@ -3,6 +3,7 @@ services:
     build: .
     command: ["data-agent", "serve", "--host", "0.0.0.0", "--port", "8000"]
     environment:
+      DATA_AGENT_DEMO_MODE: ${DATA_AGENT_DEMO_MODE:-1}
       DATA_AGENT_DATA_ROOT: /workspace
       DATA_AGENT_NLU_REPORT: /workspace/离线NLU重测报告_20260710.xlsx
       AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-}
@@ -29,6 +30,7 @@ services:
     build: .
     command: ["data-agent", "ui", "--host", "0.0.0.0", "--port", "8501"]
     environment:
+      DATA_AGENT_DEMO_MODE: ${DATA_AGENT_DEMO_MODE:-1}
       DATA_AGENT_DATA_ROOT: /workspace
       DATA_AGENT_NLU_REPORT: /workspace/离线NLU重测报告_20260710.xlsx
       AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-}

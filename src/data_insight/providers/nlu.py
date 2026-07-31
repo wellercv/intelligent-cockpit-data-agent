@@ -36,7 +36,7 @@ class NLUEvaluationProvider(DataProvider):
         try:
             self.warehouse = NLUReportWarehouse(
                 self.report_path,
-                settings.project_root / "data" / "nlu_report.duckdb",
+                settings.runtime_path("nlu_report.duckdb"),
             )
             self.ingest_report = self.warehouse.ensure_ready()
         except Exception as error:
@@ -185,6 +185,7 @@ class NLUEvaluationProvider(DataProvider):
             "provider": self.name,
             "ready": True,
             "optional": True,
+            "synthetic_demo": self.settings.demo_mode,
             "source": self._source_path(),
             "samples": self.ingest_report.sample_count,
             "model_errors": self.ingest_report.model_error_count,
@@ -589,13 +590,17 @@ class NLUEvaluationProvider(DataProvider):
             return "unconfigured NLU report"
         return self.settings.display_path(self.report_path)
 
-    @staticmethod
-    def _scope_warnings() -> list[str]:
-        return [
+    def _scope_warnings(self) -> list[str]:
+        warnings = [
             "The Excel source contains complete summary metrics, label-issue details, "
             "and model-error details, but not every correct NLU sample.",
             "NLU accuracy is exact-match accuracy after the report's documented label corrections.",
         ]
+        if self.settings.demo_mode:
+            warnings.append(
+                "Synthetic demo data is active; figures are not business results."
+            )
+        return warnings
 
     def _governance_record(
         self,

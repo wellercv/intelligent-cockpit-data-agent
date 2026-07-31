@@ -1389,9 +1389,12 @@ DuckDB 统一保存：
 - 25 条意图标注和 18 条含关键实体标注；
 - 62 条确定性模板银标用例，其中 48 条含关键实体标注，并与核心集分开报告；
 - Tool Runtime 超时、重试、熔断与冷却恢复故障测试；
-- 74 条代码测试；
+- 78 条代码测试；
 - 7 条 NLU/跨 Provider Agent 回归；
 - GitHub Actions、Ruff、Mypy 核心类型门禁与本地全量质量脚本；
+- 公开仓库零数据 Synthetic Demo，生成 42 条 ASR 与 14 条 NLU fixture，并与真实运行时完全隔离；
+- pip-audit 漏洞阻断、Dependabot 周期更新和 SECURITY 风险接受说明；
+- GitHub Actions 实际启动 Docker Demo 容器并校验 `/health` 双 Provider 指标；
 - Azure Planner/Composer 异常的确定性 fallback 与 Trace 证据；
 - 非 ASR 销售数据契约测试。
 
@@ -1431,7 +1434,7 @@ DuckDB 统一保存：
 
 | 验证项 | 当前结果 |
 |---|---:|
-| 代码测试 | 74/74 通过 |
+| 代码测试 | 78/78 通过 |
 | Agent 回归用例 | 25/25 通过 |
 | 合成银标 Agent 用例 | 62/62 通过（模板生成，不等同人工金标） |
 | NLU/跨 Provider 用例 | 7/7 通过 |
@@ -1542,7 +1545,7 @@ DuckDB 统一保存：
 
 **第四，可信与安全。** 回答经过数字、事实和引用校验；数据修改必须经过数据契约、结构化差异预览、用户显式确认、数据集版本和回滚。
 
-**第五，效果。** 当前接入 ASR 与 NLU 两个真实 Provider：92,301 条 ASR Case、104,897 条 NLU 汇总样本和 11,885 条 NLU 模型错误；识别 44 个 ASR 与 49 个 NLU 治理候选。74 条代码测试、25 条核心 Agent 回归、62 条合成银标、7 条 NLU/跨 Provider 回归和 18 条 Hybrid RAG 检索用例全部通过。Azure `gpt-5.4-mini` 当前 smoke 为 6/6、Judge 4.7/5；Planner/Composer 故障可确定性降级。
+**第五，效果。** 当前接入 ASR 与 NLU 两个真实 Provider：92,301 条 ASR Case、104,897 条 NLU 汇总样本和 11,885 条 NLU 模型错误；识别 44 个 ASR 与 49 个 NLU 治理候选。78 条代码测试、25 条核心 Agent 回归、62 条合成银标、7 条 NLU/跨 Provider 回归和 18 条 Hybrid RAG 检索用例全部通过。Azure `gpt-5.4-mini` 当前 smoke 为 6/6、Judge 4.7/5；Planner/Composer 故障可确定性降级。
 
 ---
 
@@ -1577,7 +1580,7 @@ Azure OpenAI Chat/Planner/Composer 和 LLM-as-Judge 已完成 `gpt-5.4-mini` 在
 
 - 接入 ASR CSV/JSON 与 NLU Excel/嵌套 JSON 两个真实 Provider，使用独立 DuckDB Warehouse 与 Data Contract 统一暴露工具，支持跨 Provider 同轮编排；NLU Provider 覆盖 104,897 条汇总样本、11,885 条模型错误和 3,501 条数值槽位标签问题。
 
-- 构建确定性评测与可选 Azure LLM-as-Judge 双轨体系，覆盖意图、实体、工具、Agent、答案、引用、Recall@K 和 MRR，并设置检索晋级门槛；通过 GitHub Actions、Ruff、Mypy、74 条测试和模型故障注入建立质量门禁，Azure Planner/Composer 异常时确定性降级并记录 Trace。
+- 构建确定性评测与可选 Azure LLM-as-Judge 双轨体系，覆盖意图、实体、工具、Agent、答案、引用、Recall@K 和 MRR，并设置检索晋级门槛；通过 GitHub Actions、Ruff、Mypy、pip-audit、78 条测试和模型故障注入建立质量门禁，Azure Planner/Composer 异常时确定性降级并记录 Trace。
 ```
 
 ### 20.4 不使用待在线验收能力时的保守写法

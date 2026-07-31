@@ -69,15 +69,15 @@ class AgentService:
             else FeatureHashEmbedding()
         )
         self.investigation_memory = InvestigationMemory(
-            self.settings.project_root / "data" / "investigation_chroma",
+            self.settings.runtime_path("investigation_chroma"),
             self.embedding,
         )
         self.asr_provider = MultilingualASRProvider(self.settings)
         self.nlu_provider = NLUEvaluationProvider(self.settings)
         self.knowledge_provider = KnowledgeProvider(
             self.settings.knowledge_dir,
-            self.settings.project_root / "data" / "knowledge.db",
-            self.settings.project_root / "data" / "knowledge_chroma",
+            self.settings.runtime_path("knowledge.db"),
+            self.settings.runtime_path("knowledge_chroma"),
             self.embedding,
         )
         self.governance_provider = DataGovernanceProvider(

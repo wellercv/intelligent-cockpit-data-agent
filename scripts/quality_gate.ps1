@@ -66,6 +66,9 @@ try {
     }
 
     Invoke-Checked "Dependency check" { & $Python -m pip check }
+    Invoke-Checked "Dependency vulnerability audit" {
+        & $Python -m pip_audit --skip-editable --ignore-vuln PYSEC-2026-311
+    }
     Write-Host "`nQuality gate passed." -ForegroundColor Green
 }
 finally {

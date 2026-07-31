@@ -24,24 +24,49 @@ class Settings:
     case_pattern: str
     summary_pattern: str
     nlu_report_path: Path | None = None
+    demo_mode: bool = False
+    runtime_dir: Path | None = None
 
     @classmethod
     def load(cls, project_root: Path | None = None) -> "Settings":
         root = (project_root or Path(__file__).resolve().parents[2]).resolve()
         config_path = root / "config" / "sources.yaml"
         payload = yaml.safe_load(config_path.read_text(encoding="utf-8"))
-        configured_data_root = os.environ.get("DATA_AGENT_DATA_ROOT")
-        data_root = Path(configured_data_root).resolve() if configured_data_root else (root / payload["data_root"]).resolve()
-        configured_nlu_report = os.environ.get("DATA_AGENT_NLU_REPORT")
-        nlu_file = (payload.get("nlu_report") or {}).get("file")
-        nlu_report_path = (
-            Path(configured_nlu_report).resolve()
-            if configured_nlu_report
-            else (data_root / nlu_file).resolve()
-            if nlu_file
-            else None
-        )
-        data_dir = root / "data"
+        demo_mode = os.environ.get("DATA_AGENT_DEMO_MODE", "").casefold() in {
+            "1",
+            "true",
+            "yes",
+            "on",
+        }
+        if demo_mode:
+            from data_insight.demo_data import ensure_demo_data
+
+            demo_root = Path(
+                os.environ.get(
+                    "DATA_AGENT_DEMO_ROOT",
+                    root / "data" / "demo_sources",
+                )
+            ).resolve()
+            demo = ensure_demo_data(demo_root)
+            data_root = demo_root
+            nlu_report_path = Path(demo["nlu_report"]).resolve()
+        else:
+            configured_data_root = os.environ.get("DATA_AGENT_DATA_ROOT")
+            data_root = (
+                Path(configured_data_root).resolve()
+                if configured_data_root
+                else (root / payload["data_root"]).resolve()
+            )
+            configured_nlu_report = os.environ.get("DATA_AGENT_NLU_REPORT")
+            nlu_file = (payload.get("nlu_report") or {}).get("file")
+            nlu_report_path = (
+                Path(configured_nlu_report).resolve()
+                if configured_nlu_report
+                else (data_root / nlu_file).resolve()
+                if nlu_file
+                else None
+            )
+        data_dir = root / "data" / "demo_runtime" if demo_mode else root / "data"
         data_dir.mkdir(parents=True, exist_ok=True)
         governance_dir = data_dir / "governance"
         governance_dir.mkdir(parents=True, exist_ok=True)
@@ -58,7 +83,13 @@ class Settings:
             case_pattern=payload["patterns"]["cases"],
             summary_pattern=payload["patterns"]["summary"],
             nlu_report_path=nlu_report_path,
+            demo_mode=demo_mode,
+            runtime_dir=data_dir,
         )
+
+    def runtime_path(self, *parts: str) -> Path:
+        root = self.runtime_dir or self.project_root / "data"
+        return root.joinpath(*parts)
 
     def display_path(self, path: Path) -> str:
         resolved = path.resolve()
